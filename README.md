@@ -1,27 +1,30 @@
+[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/AR7CADm8)
+[![Open in Codespaces](https://classroom.github.com/assets/launch-codespace-2972f46106e565e64193e422d61a12cf1da4916b45550586e14ef0a7c637dd04.svg)](https://classroom.github.com/open-in-codespaces?assignment_repo_id=21013370)
 # Proposta de aplicativo
 
 ## Equipe
-* **Nome do Aluno(a) 1:** [Seu nome e matrícula]
-* **Nome do Aluno(a) 2:** [Seu nome e matrícula]
-* **Nome do Aluno(a) 3:** [Seu nome e matrícula]
-* ...
+* **Nome do Aluno(a) 1:** Júlio Mateus Morais (563850)
+* **Nome do Aluno(a) 2:** Pablo Vinicios da Silva Araujo (574229)
 
 ---
 
-## Título do Projeto
-[Escolha um título criativo e descritivo para o seu projeto.]
+## CineTrailer
 
 ## Descrição do Projeto
-[Descreva em 2-3 parágrafos o que o seu projeto faz. Qual é o problema que ele resolve? Quem é o público-alvo? Quais são as principais funcionalidades?]
+O CineTrailer é um aplicativo voltado para amantes de filmes e séries que desejam descobrir novas produções e acompanhar lançamentos de forma prática e interativa. 
+
+O aplicativo deve reunir trailers, sinopses, avaliações e informações sobre cada obra, permitindo ao usuário explorar diferentes gêneros e encontrar rapidamente algo que combine com seu gosto.
+
+Será comsumida a API externa The Movie DB (https://www.themoviedb.org/)
 
 ---
 
 ## Funcionalidades Principais
 [Liste as principais funcionalidades do projeto. Use caixas de seleção para que a equipe possa marcar as concluídas nas próximas etapas.]
 
-- [ ] Funcionalidade 1: [Breve descrição da funcionalidade]
-- [ ] Funcionalidade 2: [Breve descrição da funcionalidade]
-- [ ] Funcionalidade 3: [Breve descrição da funcionalidade]
+- [ ] Funcionalidade 1: Exibir trailers de filmes e séries.
+- [ ] Funcionalidade 2: Pesquisar filmes e séries por nome e gênero.
+- [ ] Funcionalidade 3: Notificar o usuário sobre novos lançamentos e trailers adicionados.
 - [ ] ...
 
 ---
