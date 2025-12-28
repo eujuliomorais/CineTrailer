@@ -1,6 +1,5 @@
 package com.example.cinetrailer.ui.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,12 +10,12 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 
 @Composable
 fun MovieCard(
-    movieImageRes: Int,
+    posterPath: String?,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -28,8 +27,8 @@ fun MovieCard(
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
-        Image(
-            painter = painterResource(id = movieImageRes),
+        AsyncImage(
+            model = "https://image.tmdb.org/t/p/w500$posterPath",
             contentDescription = "Capa do Filme",
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
