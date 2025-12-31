@@ -1,46 +1,37 @@
 package com.example.cinetrailer.ui.screens
 
-import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 import com.example.cinetrailer.data.Movie
-import com.example.cinetrailer.data.RetrofitInstance
+import com.example.cinetrailer.ui.ViewModel.HomeUiState
+import com.example.cinetrailer.ui.ViewModel.HomeViewModel
 import com.example.cinetrailer.ui.components.MovieCard
 
 @Composable
-fun HomeScreen() {
-    var movies by remember { mutableStateOf<List<Movie>>(emptyList()) }
+fun HomeScreen(viewModel: HomeViewModel = viewModel()) {
+    val state = viewModel.uiState
 
+    // Chamamos o fetch apenas uma vez quando a tela carrega
     LaunchedEffect(Unit) {
-        try {
-            val apiKey = "192cbca5e86b88b51a3902158c2a0d77"
-            val response = RetrofitInstance.api.getPopularMovies(apiKey)
-            movies = response.results
-
-        } catch (e: Exception) {
-            Log.e("HomeScreen", "Erro ao carregar: ${e.message}")
-        }
+        viewModel.fetchMovies()
     }
 
+    // Usamos o Column oficial do Compose (importado do foundation.layout)
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -54,19 +45,38 @@ fun HomeScreen() {
             modifier = Modifier.padding(16.dp)
         )
 
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(3),
-            contentPadding = PaddingValues(8.dp),
-            modifier = Modifier.fillMaxSize()
-        ) {
-            items(movies) { movie ->
-                MovieCard(
-                    posterPath = movie.poster_path,
-                    onClick = {
-                        println("Filme: ${movie.title}")
-                    }
-                )
+        when (val currentState = state) {
+            is HomeUiState.Loading -> {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator(color = Color.White)
+                }
             }
+            is HomeUiState.Success -> {
+                MovieGrid(currentState.movies)
+            }
+            is HomeUiState.Error -> {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text(text = "Erro: ${currentState.message}", color = Color.Red)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun MovieGrid(movies: List<Movie>) {
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(3),
+        contentPadding = PaddingValues(8.dp),
+        modifier = Modifier.fillMaxSize()
+    ) {
+        items(movies) { movie ->
+            MovieCard(
+                posterPath = movie.poster_path,
+                onClick = {
+                    println("Filme clicado: ${movie.title}")
+                }
+            )
         }
     }
 }
