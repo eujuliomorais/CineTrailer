@@ -8,6 +8,10 @@ android {
     namespace = "com.example.cinetrailer"
     compileSdk = 36
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     defaultConfig {
         applicationId = "com.example.cinetrailer"
         minSdk = 24
