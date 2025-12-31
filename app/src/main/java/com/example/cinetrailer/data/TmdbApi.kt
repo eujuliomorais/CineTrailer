@@ -20,9 +20,12 @@ data class Movie(
 
 interface TmdbApiService {
     @GET("movie/popular")
-    suspend fun getPopularMovies(
+    suspend fun getPopularMovies(@Query("api_key") apiKey: String): MovieResponse
+
+    @GET("search/movie")
+    suspend fun searchMovies(
         @Query("api_key") apiKey: String,
-        @Query("language") language: String = "pt-BR"
+        @Query("query") query: String
     ): MovieResponse
 }
 
