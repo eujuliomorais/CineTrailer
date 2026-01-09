@@ -45,9 +45,8 @@ fun SearchScreen() {
 
     LaunchedEffect(Unit) {
         try {
-            val apiKey = "192cbca5e86b88b51a3902158c2a0d77"
-            val response = RetrofitInstance.api.getPopularMovies(apiKey)
-            movies = response.results
+            val popularResponse = RetrofitInstance.api.getPopularMovies()
+            movies = popularResponse.results
         } catch (e: Exception) {
             Log.e("SearchScreen", "Erro: ${e.message}")
         }

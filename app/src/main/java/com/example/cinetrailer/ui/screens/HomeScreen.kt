@@ -32,8 +32,7 @@ fun HomeScreen() {
 
     LaunchedEffect(Unit) {
         try {
-            val apiKey = "192cbca5e86b88b51a3902158c2a0d77"
-            val response = RetrofitInstance.api.getPopularMovies(apiKey)
+            val response = RetrofitInstance.api.getPopularMovies()
             movies = response.results
 
         } catch (e: Exception) {
