@@ -32,8 +32,13 @@ fun HomeScreen() {
 
     LaunchedEffect(Unit) {
         try {
-            val response = RetrofitInstance.api.getPopularMovies()
-            movies = response.results
+            val accumulatedList = mutableListOf<Movie>()
+
+            for (pagina in 1..3) {
+                val response = RetrofitInstance.api.getDiscoverMovies(page = pagina)
+                accumulatedList.addAll(response.results)
+            }
+            movies = accumulatedList.distinctBy { it.id }
 
         } catch (e: Exception) {
             Log.e("HomeScreen", "Erro ao carregar: ${e.message}")

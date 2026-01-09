@@ -1,6 +1,7 @@
 package com.example.cinetrailer.data
 
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 data class MovieResponse(
     val results: List<Movie>
@@ -27,4 +28,12 @@ interface TmdbApiService {
     //  em breve
     @GET("movie/upcoming")
     suspend fun getUpcomingMovies(): MovieResponse
+
+    // descobrir
+    @GET("discover/movie")
+    suspend fun getDiscoverMovies(
+        @Query("sort_by") sortBy: String = "popularity.desc",
+        @Query("include_adult") includeAdult: Boolean = false,
+        @Query("page") page: Int = 1
+    ): MovieResponse
 }
