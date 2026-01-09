@@ -1,7 +1,5 @@
 package com.example.cinetrailer.data
 
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -19,22 +17,23 @@ data class Movie(
 }
 
 interface TmdbApiService {
+    // Populares
     @GET("movie/popular")
-    suspend fun getPopularMovies(
-        @Query("api_key") apiKey: String,
-        @Query("language") language: String = "pt-BR"
+    suspend fun getPopularMovies(): MovieResponse
+
+    // Cartaz
+    @GET("movie/now_playing")
+    suspend fun getNowPlayingMovies(): MovieResponse
+
+    //  em breve
+    @GET("movie/upcoming")
+    suspend fun getUpcomingMovies(): MovieResponse
+
+    // descobrir
+    @GET("discover/movie")
+    suspend fun getDiscoverMovies(
+        @Query("sort_by") sortBy: String = "popularity.desc",
+        @Query("include_adult") includeAdult: Boolean = false,
+        @Query("page") page: Int = 1
     ): MovieResponse
 }
-
-object RetrofitInstance {
-    private const val BASE_URL = "https://api.themoviedb.org/3/"
-
-    val api: TmdbApiService by lazy {
-        Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(TmdbApiService::class.java)
-    }
-}
-
