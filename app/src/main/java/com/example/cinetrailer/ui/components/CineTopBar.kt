@@ -1,12 +1,14 @@
 package com.example.cinetrailer.ui.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -15,12 +17,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.cinetrailer.R
+import com.example.cinetrailer.ui.theme.LilacBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CineTopBar(
     modifier: Modifier = Modifier
 ) {
+    val barColor = if (isSystemInDarkTheme()) MaterialTheme.colorScheme.background else LilacBar
     TopAppBar(
         title = {
             Image(
@@ -34,14 +38,14 @@ fun CineTopBar(
                 Icon(
                     imageVector = Icons.Default.MoreVert,
                     contentDescription = "Mais opções",
-                    tint = Color.White
+                    tint = MaterialTheme.colorScheme.onBackground
                 )
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color.Black,
-            titleContentColor = Color.White,
-            actionIconContentColor = Color.White
+            containerColor = barColor,
+            titleContentColor = MaterialTheme.colorScheme.onBackground,
+            actionIconContentColor = MaterialTheme.colorScheme.onBackground
         ),
         modifier = modifier
     )
