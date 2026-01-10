@@ -41,7 +41,6 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.cinetrailer.data.Movie
 import com.example.cinetrailer.data.RetrofitInstance
 import com.example.cinetrailer.ui.components.MovieCard
@@ -63,7 +62,7 @@ fun SearchScreen() {
     LaunchedEffect(Unit) {
         try {
             val nowPlaying = RetrofitInstance.api.getNowPlayingMovies()
-            val popular = RetrofitInstance.api.getPopularMovies()
+            val popular = RetrofitInstance.api.getPopularMovies(apiKey)
             val upcoming = RetrofitInstance.api.getUpcomingMovies()
 
             nowPlayingMovies = nowPlaying.results
