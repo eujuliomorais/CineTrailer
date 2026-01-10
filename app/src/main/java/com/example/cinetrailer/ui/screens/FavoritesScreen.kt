@@ -27,6 +27,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.cinetrailer.data.movie.models.MovieViewModel
 import com.example.cinetrailer.ui.components.RatingBar
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import coil.compose.AsyncImage
@@ -36,11 +37,15 @@ fun FavoritesScreen(viewModel: MovieViewModel = viewModel()) {
     val favorites by viewModel.favoriteMovies.collectAsState(initial = emptyList())
     val imageBaseUrl = "https://image.tmdb.org/t/p/w500"
 
-    Column(modifier = Modifier.fillMaxSize().background(Color(0xFF121212))) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+    ) {
         Text(
-            "Meus Favoritos",
-            color = Color.White,
-            fontSize = 24.sp,
+            text = "Meus Favoritos",
+            color = MaterialTheme.colorScheme.onBackground,
+            style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(16.dp)
         )
@@ -68,9 +73,9 @@ fun FavoritesScreen(viewModel: MovieViewModel = viewModel()) {
                             .padding(start = 16.dp)
                     ) {
                         Text(
-                            movie.title,
-                            color = Color.White,
-                            fontSize = 18.sp,
+                            text = movie.title,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold
                         )
 
@@ -84,9 +89,9 @@ fun FavoritesScreen(viewModel: MovieViewModel = viewModel()) {
 
                     IconButton(onClick = { viewModel.removeFavorite(movie) }) {
                         Icon(
-                            Icons.Default.Delete,
+                            imageVector = Icons.Default.Delete,
                             contentDescription = "Excluir",
-                            tint = Color.Red
+                            tint = MaterialTheme.colorScheme.error
                         )
                     }
                 }
