@@ -1,16 +1,20 @@
 package com.example.cinetrailer.ui.ViewModel
 
+import android.app.Application
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cinetrailer.data.Movie
 import com.example.cinetrailer.data.RetrofitInstance
+import com.example.cinetrailer.data.local.AppDatabase
+import com.example.cinetrailer.data.local.MovieEntity
 import kotlinx.coroutines.launch
 
-// HomeViewModel.kt
-class HomeViewModel : ViewModel() {
+class HomeViewModel(application: Application) : AndroidViewModel(application) {
+
+    private val movieDao = AppDatabase.getDatabase(application).movieDao()
     var uiState by mutableStateOf<HomeUiState>(HomeUiState.Loading)
         private set
 
@@ -27,6 +31,14 @@ class HomeViewModel : ViewModel() {
             } catch (e: Exception) {
                 uiState = HomeUiState.Error("Erro de conexão ou chave inválida")
             }
+        }
+    }
+
+    fun toggleFavorite(movie: Movie) {
+        viewModelScope.launch {
+            movieDao.insertFavorite(
+                MovieEntity(movie.id, movie.title, movie.poster_path)
+            )
         }
     }
 }

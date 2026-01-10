@@ -26,12 +26,10 @@ import com.example.cinetrailer.ui.components.MovieCard
 fun HomeScreen(viewModel: HomeViewModel = viewModel()) {
     val state = viewModel.uiState
 
-    // Chamamos o fetch apenas uma vez quando a tela carrega
     LaunchedEffect(Unit) {
         viewModel.fetchMovies()
     }
 
-    // Usamos o Column oficial do Compose (importado do foundation.layout)
     Column(
         modifier = Modifier
             .fillMaxSize()
