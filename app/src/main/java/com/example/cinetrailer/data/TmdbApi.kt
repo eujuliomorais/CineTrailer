@@ -17,29 +17,32 @@ data class Movie(
 }
 
 interface TmdbApiService {
-    // Populares
     @GET("movie/popular")
-    suspend fun getPopularMovies(apiKey: Int): MovieResponse
+    suspend fun getPopularMovies(
+        @Query("api_key") apiKey: String
+    ): MovieResponse
 
-    // Cartaz
     @GET("movie/now_playing")
-    suspend fun getNowPlayingMovies(): MovieResponse
+    suspend fun getNowPlayingMovies(
+        @Query("api_key") apiKey: String
+    ): MovieResponse
 
-    //  em breve
     @GET("movie/upcoming")
-    suspend fun getUpcomingMovies(): MovieResponse
+    suspend fun getUpcomingMovies(
+        @Query("api_key") apiKey: String
+    ): MovieResponse
 
-    // descobrir
     @GET("discover/movie")
     suspend fun getDiscoverMovies(
+        @Query("api_key") apiKey: String,
         @Query("sort_by") sortBy: String = "popularity.desc",
         @Query("include_adult") includeAdult: Boolean = false,
         @Query("page") page: Int = 1
     ): MovieResponse
 
-    // busca
     @GET("search/movie")
     suspend fun searchMovies(
+        @Query("api_key") apiKey: String,
         @Query("query") query: String,
         @Query("language") language: String = "pt-BR"
     ): MovieResponse
