@@ -1,3 +1,10 @@
+import java.util.Properties
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(localPropertiesFile.inputStream())
+}
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -17,6 +24,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        val apiKey = localProperties.getProperty("TMDB_API_KEY") ?: ""
+        buildConfigField("String", "TMDB_API_KEY", "\"$apiKey\"")
     }
 
     buildTypes {
@@ -28,6 +37,7 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -35,8 +45,10 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
+
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -45,7 +57,6 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     "ksp"(libs.androidx.room.compiler)
 
-    // Lifecycle & Compose
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
