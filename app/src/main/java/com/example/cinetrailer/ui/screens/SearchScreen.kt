@@ -1,5 +1,6 @@
 package com.example.cinetrailer.ui.screens
 
+import android.R.attr.apiKey
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

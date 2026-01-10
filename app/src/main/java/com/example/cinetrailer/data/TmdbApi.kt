@@ -19,7 +19,7 @@ data class Movie(
 interface TmdbApiService {
     // Populares
     @GET("movie/popular")
-    suspend fun getPopularMovies(apiKey: String): MovieResponse
+    suspend fun getPopularMovies(apiKey: Int): MovieResponse
 
     // Cartaz
     @GET("movie/now_playing")
