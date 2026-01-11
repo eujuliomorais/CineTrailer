@@ -10,6 +10,16 @@ import kotlinx.coroutines.launch
 // MovieViewModel.kt
 class MovieViewModel(application: Application) : AndroidViewModel(application) {
     private val movieDao = AppDatabase.getDatabase(application).movieDao()
+    private var _currentMovies = mutableListOf<Movie>()
+
+    fun updateCurrentMovies(newList: List<Movie>) {
+        _currentMovies.clear()
+        _currentMovies.addAll(newList)
+    }
+
+    fun getMovieById(id: Int?): Movie? {
+        return _currentMovies.find { it.id == id }
+    }
 
     val favoriteMovies = movieDao.getAllFavorites()
 
