@@ -1,5 +1,6 @@
 package com.example.cinetrailer.ui.screens
 
+import com.example.cinetrailer.BuildConfig
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -41,7 +42,6 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.cinetrailer.data.Movie
 import com.example.cinetrailer.data.RetrofitInstance
 import com.example.cinetrailer.ui.components.MovieCard
@@ -54,7 +54,6 @@ fun SearchScreen() {
     var nowPlayingMovies by remember { mutableStateOf<List<Movie>>(emptyList()) }
     var popularMovies by remember { mutableStateOf<List<Movie>>(emptyList()) }
     var upcomingMovies by remember { mutableStateOf<List<Movie>>(emptyList()) }
-
     var searchResults by remember { mutableStateOf<List<Movie>>(emptyList()) }
 
     val scope = rememberCoroutineScope()
@@ -62,14 +61,13 @@ fun SearchScreen() {
 
     LaunchedEffect(Unit) {
         try {
-            val nowPlaying = RetrofitInstance.api.getNowPlayingMovies()
-            val popular = RetrofitInstance.api.getPopularMovies()
-            val upcoming = RetrofitInstance.api.getUpcomingMovies()
+            val nowPlaying = RetrofitInstance.api.getNowPlayingMovies(BuildConfig.TMDB_API_KEY)
+            val popular = RetrofitInstance.api.getPopularMovies(BuildConfig.TMDB_API_KEY)
+            val upcoming = RetrofitInstance.api.getUpcomingMovies(BuildConfig.TMDB_API_KEY)
 
             nowPlayingMovies = nowPlaying.results
             popularMovies = popular.results
             upcomingMovies = upcoming.results
-
         } catch (e: Exception) {
             Log.e("SearchScreen", "Erro ao carregar categorias: ${e.message}")
         }
@@ -79,7 +77,10 @@ fun SearchScreen() {
         if (query.isNotEmpty()) {
             scope.launch {
                 try {
-                    val response = RetrofitInstance.api.searchMovies(query)
+                    val response = RetrofitInstance.api.searchMovies(
+                        apiKey = BuildConfig.TMDB_API_KEY,
+                        query = query
+                    )
                     searchResults = response.results
                     focusManager.clearFocus()
                 } catch (e: Exception) {
