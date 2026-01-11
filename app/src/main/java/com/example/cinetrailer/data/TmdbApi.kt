@@ -31,20 +31,28 @@ interface TmdbApiService {
 
     @GET("search/movie")
     suspend fun searchMovies(
-        @Query("query") query: String
+        @Query("query") query: String,
+        @Query("language") language: String = "pt-BR"
     ): MovieResponse
 
     @GET("movie/now_playing")
-    suspend fun getNowPlayingMovies(): MovieResponse
+    suspend fun getNowPlayingMovies(
+        @Query("language") language: String = "pt-BR"
+    ): MovieResponse
 
     @GET("movie/popular")
-    suspend fun getPopularMovies(): MovieResponse
+    suspend fun getPopularMovies(
+        @Query("language") language: String = "pt-BR"
+    ): MovieResponse
 
     @GET("movie/upcoming")
-    suspend fun getUpcomingMovies(): MovieResponse
+    suspend fun getUpcomingMovies(
+        @Query("language") language: String = "pt-BR"
+    ): MovieResponse
 
     @GET("movie/{movie_id}/videos")
     suspend fun getMovieVideos(
-        @Path("movie_id") movieId: Int
+        @Path("movie_id") movieId: Int,
+        @Query("language") language: String = "pt-BR"
     ): VideoResponse
 }
