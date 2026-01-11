@@ -12,7 +12,6 @@ import com.example.cinetrailer.data.RetrofitInstance
 import com.example.cinetrailer.data.movie.database.AppDatabase
 import com.example.cinetrailer.data.movie.entity.MovieEntity
 import kotlinx.coroutines.launch
-// MovieViewModel.kt
 class MovieViewModel(application: Application) : AndroidViewModel(application) {
     private val movieDao = AppDatabase.getDatabase(application).movieDao()
     private var _currentMovies = mutableListOf<Movie>()
@@ -60,11 +59,28 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
     fun loadTrailer(movieId: Int) {
         viewModelScope.launch {
             try {
-                val response = RetrofitInstance.api.getMovieVideos(movieId)
-                val trailer = response.results.find { it.site == "YouTube" && it.type == "Trailer" }
-                trailerKey = trailer?.key
+                var response = RetrofitInstance.api.getMovieVideos(movieId, language = "pt-BR")
+
+                var finalVideo = response.results.find { it.site == "YouTube" && it.type == "Trailer" }
+
+                if (finalVideo == null) {
+                    finalVideo = response.results.find { it.site == "YouTube" && it.type == "Teaser" }
+                }
+
+
+                if (finalVideo == null) {
+                    response = RetrofitInstance.api.getMovieVideos(movieId, language = "en-US")
+
+                    finalVideo = response.results.find { it.site == "YouTube" && it.type == "Trailer" }
+
+                    if (finalVideo == null) {
+                        finalVideo = response.results.find { it.site == "YouTube" && it.type == "Teaser" }
+                    }
+                }
+
+                trailerKey = finalVideo?.key ?: response.results.firstOrNull { it.site == "YouTube" }?.key
+
             } catch (e: Exception) {
-                Log.e("MovieViewModel", "Erro ao carregar trailer", e)
                 trailerKey = null
             }
         }

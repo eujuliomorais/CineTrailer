@@ -40,6 +40,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.example.cinetrailer.data.Movie
 import com.example.cinetrailer.data.movie.models.MovieViewModel
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.foundation.clickable
+import androidx.compose.ui.draw.alpha
 
 @Composable
 fun DetailsScreen(
@@ -124,19 +129,44 @@ fun DetailsScreen(
     }
 }
 
-@SuppressLint("SetJavaScriptEnabled")
 @Composable
 fun YoutubePlayer(videoId: String) {
-    androidx.compose.ui.viewinterop.AndroidView(
+    val context = LocalContext.current
+
+    Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(220.dp)
-            .clip(RoundedCornerShape(8.dp)),
-        factory = { context ->
-            android.webkit.WebView(context).apply {
-                settings.javaScriptEnabled = true
-                loadUrl("https://www.youtube.com/embed/$videoId")
-            }
-        }
-    )
+            .clip(RoundedCornerShape(8.dp))
+            .background(Color.Black)
+            .clickable {
+                try {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:$videoId"))
+                    context.startActivity(intent)
+                } catch (e: Exception) {
+                    val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=$videoId"))
+                    context.startActivity(webIntent)
+                }
+            },
+        contentAlignment = Alignment.Center
+    ) {
+        AsyncImage(
+            model = "https://img.youtube.com/vi/$videoId/hqdefault.jpg",
+            contentDescription = "Trailer",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .fillMaxSize()
+                .alpha(0.7f)
+        )
+
+        Icon(
+            imageVector = Icons.Default.PlayArrow,
+            contentDescription = "Assistir",
+            tint = Color.White,
+            modifier = Modifier
+                .size(64.dp)
+                .background(Color.Black.copy(alpha = 0.5f), CircleShape)
+                .padding(8.dp)
+        )
+    }
 }
