@@ -56,7 +56,9 @@ fun SearchScreen(
 
             viewModel.updateCurrentMovies(nowPlayingMovies + popularMovies + upcomingMovies)
         } catch (e: Exception) {
-            Log.e("SearchScreen", "Erro ao carregar categorias", e)
+            if (e !is kotlinx.coroutines.CancellationException) {
+                Log.e("SearchScreen", "Erro ao carregar categorias", e)
+            }
         }
     }
 
@@ -127,7 +129,6 @@ fun SearchScreen(
                 Spacer(modifier = Modifier.height(100.dp))
             }
         } else {
-            // Resultados da Busca
             Text(
                 text = "Resultados para \"$query\"",
                 style = MaterialTheme.typography.titleMedium,
