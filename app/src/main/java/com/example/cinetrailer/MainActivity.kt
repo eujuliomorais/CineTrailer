@@ -70,7 +70,7 @@ fun CineTrailerApp() {
     val navController = rememberNavController()
 
     Scaffold(
-        topBar = { CineTopBar() },
+        topBar = { CineTopBar(onAboutClick = { navController.navigate("about") }) },
         bottomBar = { BottomNavigationBar(navController = navController) }
     ) { innerPadding ->
         AppNavigation(

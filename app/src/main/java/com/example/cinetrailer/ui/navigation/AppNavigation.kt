@@ -16,6 +16,7 @@ import com.example.cinetrailer.ui.screens.DetailsScreen
 import com.example.cinetrailer.ui.screens.FavoritesScreen
 import com.example.cinetrailer.ui.screens.HomeScreen
 import com.example.cinetrailer.ui.screens.SearchScreen
+import com.example.cinetrailer.ui.screens.AboutScreen
 
 @Composable
 fun AppNavigation(
@@ -49,6 +50,10 @@ fun AppNavigation(
 
         composable(route = AppScreens.Favorites.route) {
             FavoritesScreen(viewModel = movieViewModel)
+        }
+
+        composable(route = "about") {
+            AboutScreen()
         }
 
         composable(
