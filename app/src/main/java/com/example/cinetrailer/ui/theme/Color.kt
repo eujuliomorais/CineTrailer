@@ -15,4 +15,4 @@ val DarkSurface = Color(0xFF1E1E1E)
 
 val LightBackground = Color(0xFFFFFFFF)
 val LightSurface = Color(0xFFF5F5F5)
-val LilacBar = Color(0xFFC3B1E1)
+val LilacBar = Color(0xD3D3D3)

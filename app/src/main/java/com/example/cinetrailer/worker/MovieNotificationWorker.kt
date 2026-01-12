@@ -13,6 +13,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.example.cinetrailer.BuildConfig
 import com.example.cinetrailer.MainActivity
 import com.example.cinetrailer.R
 import com.example.cinetrailer.data.RetrofitInstance

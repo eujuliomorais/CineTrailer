@@ -55,9 +55,11 @@ android {
 dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.compose.foundation.layout)
     "ksp"(libs.androidx.room.compiler)
 
     implementation(libs.androidx.core.ktx)
+    implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
@@ -72,6 +74,7 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.4.0")
     implementation("androidx.work:work-runtime-ktx:2.9.0")
     implementation("com.google.accompanist:accompanist-permissions:0.34.0")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

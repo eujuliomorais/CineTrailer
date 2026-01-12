@@ -1,6 +1,7 @@
 package com.example.cinetrailer.data
 
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 data class MovieResponse(
@@ -10,40 +11,48 @@ data class MovieResponse(
 data class Movie(
     val id: Int,
     val title: String,
-    val poster_path: String?
+    val poster_path: String?,
+    val overview: String?
 ) {
     val fullPosterUrl: String
         get() = "https://image.tmdb.org/t/p/w500$poster_path"
 }
+data class VideoResponse(
+    val results: List<Video>
+)
+
+data class Video(
+    val key: String,
+    val site: String,
+    val type: String
+)
 
 interface TmdbApiService {
-    @GET("movie/popular")
-    suspend fun getPopularMovies(
-        @Query("api_key") apiKey: String
+
+    @GET("search/movie")
+    suspend fun searchMovies(
+        @Query("query") query: String,
+        @Query("language") language: String = "pt-BR"
     ): MovieResponse
 
     @GET("movie/now_playing")
     suspend fun getNowPlayingMovies(
-        @Query("api_key") apiKey: String
+        @Query("language") language: String = "pt-BR"
+    ): MovieResponse
+
+    @GET("movie/popular")
+    suspend fun getPopularMovies(
+        @Query("language") language: String = "pt-BR"
     ): MovieResponse
 
     @GET("movie/upcoming")
     suspend fun getUpcomingMovies(
-        @Query("api_key") apiKey: String
-    ): MovieResponse
-
-    @GET("discover/movie")
-    suspend fun getDiscoverMovies(
-        @Query("api_key") apiKey: String,
-        @Query("sort_by") sortBy: String = "popularity.desc",
-        @Query("include_adult") includeAdult: Boolean = false,
-        @Query("page") page: Int = 1
-    ): MovieResponse
-
-    @GET("search/movie")
-    suspend fun searchMovies(
-        @Query("api_key") apiKey: String,
-        @Query("query") query: String,
         @Query("language") language: String = "pt-BR"
     ): MovieResponse
+
+    @GET("movie/{movie_id}/videos")
+    suspend fun getMovieVideos(
+        @Path("movie_id") movieId: Int,
+        @Query("language") language: String = "pt-BR"
+    ): VideoResponse
 }

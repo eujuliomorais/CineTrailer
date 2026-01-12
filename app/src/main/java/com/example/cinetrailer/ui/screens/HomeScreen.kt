@@ -10,52 +10,35 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.cinetrailer.data.Movie
 import com.example.cinetrailer.data.RetrofitInstance
-import com.example.cinetrailer.data.movie.models.MovieViewModel
 import com.example.cinetrailer.ui.components.MovieCard
-import com.example.cinetrailer.ui.components.RatingBar
 import com.example.cinetrailer.BuildConfig
+import com.example.cinetrailer.data.movie.models.MovieViewModel
 
 @Composable
-fun HomeScreen(viewModel: MovieViewModel = viewModel()) {
+fun HomeScreen(onMovieClick: (Movie) -> Unit, viewModel: MovieViewModel) {
     var movies by remember { mutableStateOf<List<Movie>>(emptyList()) }
 
     LaunchedEffect(Unit) {
         try {
-            val response = RetrofitInstance.api.getPopularMovies(BuildConfig.TMDB_API_KEY)
+            val response = RetrofitInstance.api.getPopularMovies()
             movies = response.results
         } catch (e: Exception) {
-            Log.e("HomeScreen", "Erro ao carregar filmes: ${e.message}")
+            Log.e("HomeScreen", "Erro: ${e.message}")
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-    ) {
-        Text(
-            text = "Catálogo",
-            color = MaterialTheme.colorScheme.onBackground,
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(16.dp)
-        )
+    Column(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
+        SectionTitle("Catálogo")
 
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
@@ -63,27 +46,11 @@ fun HomeScreen(viewModel: MovieViewModel = viewModel()) {
             modifier = Modifier.fillMaxSize()
         ) {
             items(movies) { movie ->
-                var currentRating by remember { mutableFloatStateOf(0f) }
-
-                Column(
+                MovieCard(
+                    posterPath = movie.poster_path,
+                    onClick = { onMovieClick(movie) },
                     modifier = Modifier.padding(8.dp)
-                ) {
-                    MovieCard(
-                        posterPath = movie.poster_path,
-                        onClick = {
-                            Log.d("Navigation", "Abrindo detalhes de: ${movie.title}")
-                        }
-                    )
-
-                    RatingBar(
-                        rating = currentRating,
-                        onRatingChange = { novaNota ->
-                            currentRating = novaNota
-                            viewModel.saveFavorite(movie, novaNota)
-                            Log.d("CRUD", "Filme ${movie.title} favoritado com nota $novaNota")
-                        }
-                    )
-                }
+                )
             }
         }
     }

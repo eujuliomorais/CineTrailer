@@ -1,15 +1,29 @@
 package com.example.cinetrailer.data.movie.models
 
 import android.app.Application
+import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cinetrailer.data.Movie
+import com.example.cinetrailer.data.RetrofitInstance
 import com.example.cinetrailer.data.movie.database.AppDatabase
 import com.example.cinetrailer.data.movie.entity.MovieEntity
 import kotlinx.coroutines.launch
-// MovieViewModel.kt
 class MovieViewModel(application: Application) : AndroidViewModel(application) {
     private val movieDao = AppDatabase.getDatabase(application).movieDao()
+    private var _currentMovies = mutableListOf<Movie>()
+
+    fun updateCurrentMovies(newList: List<Movie>) {
+        _currentMovies.clear()
+        _currentMovies.addAll(newList)
+    }
+
+    fun getMovieById(id: Int?): Movie? {
+        return _currentMovies.find { it.id == id }
+    }
 
     val favoriteMovies = movieDao.getAllFavorites()
 
@@ -36,6 +50,39 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
     fun removeFavorite(movie: MovieEntity) {
         viewModelScope.launch {
             movieDao.deleteFavorite(movie)
+        }
+    }
+
+    var trailerKey by mutableStateOf<String?>(null)
+        private set
+
+    fun loadTrailer(movieId: Int) {
+        viewModelScope.launch {
+            try {
+                var response = RetrofitInstance.api.getMovieVideos(movieId, language = "pt-BR")
+
+                var finalVideo = response.results.find { it.site == "YouTube" && it.type == "Trailer" }
+
+                if (finalVideo == null) {
+                    finalVideo = response.results.find { it.site == "YouTube" && it.type == "Teaser" }
+                }
+
+
+                if (finalVideo == null) {
+                    response = RetrofitInstance.api.getMovieVideos(movieId, language = "en-US")
+
+                    finalVideo = response.results.find { it.site == "YouTube" && it.type == "Trailer" }
+
+                    if (finalVideo == null) {
+                        finalVideo = response.results.find { it.site == "YouTube" && it.type == "Teaser" }
+                    }
+                }
+
+                trailerKey = finalVideo?.key ?: response.results.firstOrNull { it.site == "YouTube" }?.key
+
+            } catch (e: Exception) {
+                trailerKey = null
+            }
         }
     }
 }
